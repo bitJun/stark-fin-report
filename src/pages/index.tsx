@@ -56,7 +56,7 @@ export default function Home() {
   }
 
   return (
-    <Container>
+    <Container style={{padding: '10px'}}>
       <Stack
         spacing={2}
         direction="row"
@@ -94,9 +94,12 @@ export default function Home() {
             <RevenueChart data={list} />
             <RevenueTable data={list} />
           </>
-        ) : (
+        ) : null
+      }
+      {
+        code && data.length == 0 ? (
           <Stack>暂无数据</Stack>
-        )
+        ) : null
       }
     </Container>
   );
