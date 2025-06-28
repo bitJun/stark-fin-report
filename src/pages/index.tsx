@@ -55,6 +55,10 @@ export default function Home() {
         <Button
           variant="contained"
           onClick={()=>{
+            if (!code) {
+              alert('请输入企业code')
+              return;
+            }
             onSearchData();
             onLoadChart();
           }}
