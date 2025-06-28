@@ -11,29 +11,46 @@ import RevenueTable from '@/components/RevenueTable';
 import { getMonthlyRevenue } from '@/lib/api';
 import dayjs from 'dayjs';
 
+interface propsData {
+  date: string
+  industry_category: string
+  stock_id: string
+  stock_name: string
+  type: string
+}
+
+interface itemProps {
+  date: string;
+  revenue: number;
+  revenue_month: number;
+  revenue_year: number;
+  stock_id: string;
+  country: string;
+}
+
 export default function Home() {
-  const [list, setList] = useState<any[]>([]);
-  const [data, setData] = useState<any[]>([]);
+  const [list, setList] = useState<Array<itemProps>>([]);
+  const [data, setData] = useState<Array<propsData>>([]);
   const [code, setCode] = useState<string>('');
 
   const onSearchData = async() => {
-    let params:any = {
+    const params = {
       dataset: 'TaiwanStockInfo',
       data_id: code
     }
-    let res:any = await getMonthlyRevenue(params)
+    const res = await getMonthlyRevenue(params)
     console.log('jsons', res);
     setData(res);
   }
 
   const onLoadChart = async() => {
-    let params:any = {
+    const params = {
       dataset: 'TaiwanStockMonthRevenue',
       data_id: code,
       start_date: dayjs().startOf('year').format('YYYY-MM-DD'),
       end_date: dayjs().endOf('year').format('YYYY-MM-DD'),
     }
-    let res:any = await getMonthlyRevenue(params);
+    const res = await getMonthlyRevenue(params);
     setList(res);
     console.log('json', res);
   }
@@ -68,7 +85,12 @@ export default function Home() {
       {
         data.length > 0 ? (
           <>
-            <Typography variant="h4" gutterBottom>{data[0]?.stock_name}（{code}） - 月营收</Typography>
+            {
+              data[0] ? (
+                <Typography variant="h4" gutterBottom>{data[0]?.stock_name || ''}（{code}） - 月营收</Typography>
+              ) : ''
+            }
+            
             <RevenueChart data={list} />
             <RevenueTable data={list} />
           </>
